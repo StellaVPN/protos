@@ -5,7 +5,6 @@ package subscription;
 
 option go_package = "github.com/StellaVPN/protos/subscription";
 
-
 message UserRequest {
   int64 user_id = 1;
 }
