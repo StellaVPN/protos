@@ -11,6 +11,16 @@ message User {
   string password = 4;
 }
 
+message UserRequest {
+  int64 id = 1;
+}
+
+message UserResponse {
+  User user = 1;
+  int64 status = 2;
+  string error = 3;
+}
+
 message SignUpRequest {
   string username = 1;
   string email = 2;
@@ -39,4 +49,8 @@ service AuthService {
   rpc SignUp(SignUpRequest) returns (Token);
   rpc SignIn(SignInRequest) returns (Token);
   rpc Validate(ValidateRequest) returns (ValidateResponse);
+}
+
+service UserService {
+  rpc GetUserById(UserRequest) returns (UserResponse);
 }
