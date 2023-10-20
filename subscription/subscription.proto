@@ -1,9 +1,18 @@
 syntax="proto3";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 package subscription;
 
 option go_package = "github.com/StellaVPN/protos/subscription";
+
+service SubscriptionService {
+  rpc SubscribeUser(UserRequest) returns (UserResponse);
+  rpc GetUserLicense(UserRequest) returns (UserResponse);
+  rpc UpdateUserLicense(UserRequest) returns (UserResponse);
+  rpc DeleteUserLicense(UserRequest) returns (google.protobuf.Empty);
+}
+
 
 message UserRequest {
   int64 user_id = 1;
@@ -11,11 +20,4 @@ message UserRequest {
 
 message UserResponse {
   google.protobuf.Timestamp license_expired_at = 1;
-}
-
-
-service SubscriptionService {
-  rpc SubscribeUser(UserRequest) returns (UserResponse);
-  rpc GetUserLicense(UserRequest) returns (UserResponse);
-
 }

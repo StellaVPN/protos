@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -24,6 +25,8 @@ const _ = grpc.SupportPackageIsVersion7
 type SubscriptionServiceClient interface {
 	SubscribeUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
 	GetUserLicense(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	UpdateUserLicense(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	DeleteUserLicense(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type subscriptionServiceClient struct {
@@ -52,12 +55,32 @@ func (c *subscriptionServiceClient) GetUserLicense(ctx context.Context, in *User
 	return out, nil
 }
 
+func (c *subscriptionServiceClient) UpdateUserLicense(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
+	out := new(UserResponse)
+	err := c.cc.Invoke(ctx, "/subscription.SubscriptionService/UpdateUserLicense", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *subscriptionServiceClient) DeleteUserLicense(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/subscription.SubscriptionService/DeleteUserLicense", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SubscriptionServiceServer is the server API for SubscriptionService service.
 // All implementations must embed UnimplementedSubscriptionServiceServer
 // for forward compatibility
 type SubscriptionServiceServer interface {
 	SubscribeUser(context.Context, *UserRequest) (*UserResponse, error)
 	GetUserLicense(context.Context, *UserRequest) (*UserResponse, error)
+	UpdateUserLicense(context.Context, *UserRequest) (*UserResponse, error)
+	DeleteUserLicense(context.Context, *UserRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedSubscriptionServiceServer()
 }
 
@@ -70,6 +93,12 @@ func (UnimplementedSubscriptionServiceServer) SubscribeUser(context.Context, *Us
 }
 func (UnimplementedSubscriptionServiceServer) GetUserLicense(context.Context, *UserRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserLicense not implemented")
+}
+func (UnimplementedSubscriptionServiceServer) UpdateUserLicense(context.Context, *UserRequest) (*UserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserLicense not implemented")
+}
+func (UnimplementedSubscriptionServiceServer) DeleteUserLicense(context.Context, *UserRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserLicense not implemented")
 }
 func (UnimplementedSubscriptionServiceServer) mustEmbedUnimplementedSubscriptionServiceServer() {}
 
@@ -120,6 +149,42 @@ func _SubscriptionService_GetUserLicense_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SubscriptionService_UpdateUserLicense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubscriptionServiceServer).UpdateUserLicense(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/subscription.SubscriptionService/UpdateUserLicense",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubscriptionServiceServer).UpdateUserLicense(ctx, req.(*UserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SubscriptionService_DeleteUserLicense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubscriptionServiceServer).DeleteUserLicense(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/subscription.SubscriptionService/DeleteUserLicense",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubscriptionServiceServer).DeleteUserLicense(ctx, req.(*UserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SubscriptionService_ServiceDesc is the grpc.ServiceDesc for SubscriptionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +199,14 @@ var SubscriptionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserLicense",
 			Handler:    _SubscriptionService_GetUserLicense_Handler,
+		},
+		{
+			MethodName: "UpdateUserLicense",
+			Handler:    _SubscriptionService_UpdateUserLicense_Handler,
+		},
+		{
+			MethodName: "DeleteUserLicense",
+			Handler:    _SubscriptionService_DeleteUserLicense_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
