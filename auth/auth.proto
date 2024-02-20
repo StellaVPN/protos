@@ -32,8 +32,13 @@ message SignInRequest {
   string password = 2;
 }
 
-message Token {
-  string token = 1;
+message TokensResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message TokenRequest {
+  string refresh_token = 1;
 }
 
 message ValidateRequest {
@@ -46,8 +51,9 @@ message ValidateResponse {
 }
 
 service AuthService {
-  rpc SignUp(SignUpRequest) returns (Token);
-  rpc SignIn(SignInRequest) returns (Token);
+  rpc SignUp(SignUpRequest) returns (TokensResponse);
+  rpc SignIn(SignInRequest) returns (TokensResponse);
+  rpc Refresh(TokenRequest) returns (TokensResponse);
   rpc Validate(ValidateRequest) returns (ValidateResponse);
 }
 
